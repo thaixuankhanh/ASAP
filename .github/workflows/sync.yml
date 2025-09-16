@@ -2,8 +2,8 @@ name: Sync with upstream
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  
-  workflow_dispatch:        
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -12,7 +12,8 @@ jobs:
       - name: Checkout target repo
         uses: actions/checkout@v3
         with:
-          persist-credentials: false
+          fetch-depth: 0
+          persist-credentials: true  
 
       - name: Set git config
         run: |
@@ -29,6 +30,4 @@ jobs:
         run: git merge upstream/main --allow-unrelated-histories || true
 
       - name: Push to your repo
-        run: |
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
-
+        run: git push origin HEAD:main
